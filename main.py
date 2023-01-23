@@ -18,7 +18,6 @@ import time
 import functools
 import operator
 from helper_0 import style_benchmark_table
-import geopandas as gpd
 
 #%% defines functions
 
