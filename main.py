@@ -210,7 +210,8 @@ fig_ratings_bar.update_layout(
 )
     
 #display the fig
-st.write(fig_ratings_bar)
+st.plotly_chart(fig_ratings_bar, use_container_width=True, theme='streamlit')
+# st.write(fig_ratings_bar)
 
 with st.expander("Find the data here", expanded = False):
     download_data_bar = data_filtered.to_pandas()[
@@ -272,7 +273,8 @@ if st.session_state['count_r_percentage'] == 'count':
 if st.session_state['count_r_percentage'] == 'percentage':
     fig_sb.update_traces(textinfo="label+percent parent")
 
-st.write(fig_sb)
+st.plotly_chart(fig_sb,use_container_width=True, theme='streamlit')
+# st.write(fig_sb)
 
 with st.expander("Find the data here", expanded = False):
     download_data_sb = sunburst_data.dropna()[
@@ -283,6 +285,7 @@ with st.expander("Find the data here", expanded = False):
                                 'type_of_building':'Type of building',
                                 })
     st.dataframe(style_benchmark_table(download_data_sb),
+                 use_container_width=True
              # data_filtered.to_pandas()[['ratings_CO2_cls','count','percentage']]
              # .style.set_table_styles(styles, overwrite=False).apply(style_diag, axis=None)
              )
@@ -357,7 +360,8 @@ fig_wf.update_traces(
         hovertemplate=hovertemplate,
         textangle=0)
 
-st.write(fig_wf)
+st.plotly_chart(fig_wf,use_container_width=True, theme='streamlit')
+# st.write(fig_wf)
 
 with st.expander("Find the data here", expanded = False):
     download_data_wf = data_filtered_waterfall.to_pandas()[

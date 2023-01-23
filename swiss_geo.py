@@ -54,9 +54,11 @@ for i, shape in shapes.iterrows():
 gdf=gdf.drop(columns=['KT_TEIL']) # For the sake of clean data ;-)
 
 gdf=gdf.rename(columns={'EINWOHNERZ':'Inhabitants'})
+
+gdf = gdf[['geometry','NAME','Inhabitants','KANTONSNUM']]
 fig = px.choropleth_mapbox(gdf, geojson=gdf.geometry,
                            locations=gdf.index,
-                           color='Inhabitants',
+                           color='Inhabitants', 
                            hover_name = 'NAME',
                            color_continuous_scale='algae',
                            mapbox_style="carto-positron",
