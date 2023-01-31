@@ -383,6 +383,31 @@ with st.expander("Find the data here", expanded = False):
                            "text/csv",
                            # key='download-csv'
                         )
+    
+#make map
+import geopandas as gpd
+
+@st.cache(persist=True, show_spinner=False, allow_output_mutation=True)
+def get_map_data():
+    map_data = gpd.read_file('data_for_map.gpkg')
+    map_data["geometry"] = (map_data.to_crs(map_data.estimate_utm_crs()).simplify(1000).to_crs(map_data.crs))
+    return map_data
+
+map_data = get_map_data()
+
+fig_map = px.choropleth_mapbox(map_data, geojson=map_data.geometry,
+                            locations=map_data.index,
+                            color='inhabitants', 
+                            hover_name = 'canton_name',
+                            color_continuous_scale='algae',
+                            mapbox_style='white-bg',
+                            zoom=6, 
+                            # title = ,
+                            center = {"lat": 46.8, "lon": 8.5},
+                            opacity=0.5,
+                            )
+
+st.plotly_chart(fig_map,use_container_width=True, theme='streamlit')
 
 #stop performance clock and display time taken to run the script
 stop = time.perf_counter()
