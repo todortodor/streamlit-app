@@ -30,6 +30,10 @@ for year in range(2020,2025):
              options='random',
              length=40
              ),
+        dict(name='source',
+             kind='str',
+             options=['IAZI','BAFU']
+             ),
         dict(name='kanton',
              kind='str',
              options=pd.read_csv('georef-switzerland-kanton-millesime.csv',

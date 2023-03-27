@@ -233,8 +233,40 @@ with st.expander("Find the data here", expanded = False):
                            # key='download-csv'
                         )
 
+# Categorical bar plot with different sources
+data_filtered_with_source = pl.concat([filter_compute_count_and_percent(data.filter(pl.col('source')=='IAZI'), 
+                                                 'ratings_CO2_cls', 
+                                                 'year_data').with_columns(pl.lit('IAZI').alias('source')),
+                                      filter_compute_count_and_percent(data.filter(pl.col('source')=='BAFU'), 
+                                                                                       'ratings_CO2_cls', 
+                                                                                       'year_data').with_columns(pl.lit('BAFU').alias('source'))]
+                                      )
 
-#Sunburst graph
+code = '''fig = go.Figure()
+
+fig.add_traces([go.Bar(x=data_filtered_with_source.filter(pl.col('source')==source)['ratings_CO2_cls'], 
+                 y=data_filtered_with_source.filter(pl.col('source')==source)[st.session_state['count_r_percentage']],
+                 name=source) 
+                for source in ['IAZI','BAFU']])
+
+fig.update_layout(title_text="Multi-category axis")
+
+st.plotly_chart(fig,use_container_width=True, theme='streamlit')'''
+
+st.code(body = code)
+
+fig = go.Figure()
+
+fig.add_traces([go.Bar(x=data_filtered_with_source.filter(pl.col('source')==source)['ratings_CO2_cls'], 
+                 y=data_filtered_with_source.filter(pl.col('source')==source)[st.session_state['count_r_percentage']],
+                 name=source) 
+                for source in ['IAZI','BAFU']])
+
+fig.update_layout(title_text="Multi-category axis")
+
+st.plotly_chart(fig,use_container_width=True, theme='streamlit')
+
+# Sunburst graph
 def make_sunburst(yearly_data,col_list,dictionary_colors):
     data_filtered_sunburst = pl.concat(
         [yearly_data.lazy().groupby(col_list[:i+1]).agg(
